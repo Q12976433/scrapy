@@ -73,5 +73,5 @@ if __name__ == '__main__':
         print(len(list1))
     print("saving")
     df = pd.DataFrame(list1)
-    df.to_excel("vsc3.xlsx",index=False)
+    df.to_excel("uts.xlsx",index=False)
     print("over")
