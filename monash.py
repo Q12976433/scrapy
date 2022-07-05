@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 """
+
 # create of datetime:2022/6/15 1:00
 ----------
 # create of software: PyCharm
@@ -51,11 +52,12 @@ def parse(url):
 
 def parse1(li,i,labels):
     list1 = {}
-    list1['degrees'] = labels[i]
+    list1['degrees'] = labels[i] 
     list1['href'] = li.xpath("./a/@href")[0]
     list1['course_name'] = li.xpath(".//h3/text()")[0]
     list1['course_code'] = li.xpath(".//p/text()")[0].split(":")[1].strip()
     html = get_html(list1['href'])
+    list1['year_acquisition'] = ''.join(html.xpath("//*[@id='breadcrumbs']/ul/li[4]/a/text()"))
     list1['desc'] = ''.join(html.xpath("//div[contains(@class,'course-page__summary-text')]//text()")).strip().replace(
         "\r\n", '').replace("   ", '')
     list1['location'] = ''.join(
@@ -64,23 +66,28 @@ def parse1(li,i,labels):
     list1['duration'] = ''.join(
         html.xpath("//*[text()='Duration']/../following-sibling::td[1]//text()")).strip().replace("\r\n", '').replace(
         "   ", '')
-    list1['fees'] = ''.join(html.xpath("//h5[text()='Fees']/following-sibling::p/a/text()")).strip().replace("\r\n", '').replace("   ", '')
-    list1['qualifications'] = ''.join(
+#    list1['fees'] = ''.join(html.xpath("//h5[text()='Fees']/following-sibling::p/a/text()")).strip().replace("\r\n", '').replace("   ", '')
+    list1['entry_requirements'] = ''.join(
         html.xpath("//*[@id='min-entry-requirements']/*[text()='Qualifications']/following-sibling::p[position()<=count(//*[@id='min-entry-requirements']/*[text()='Qualifications']/following-sibling::p)-count(//*[@id='min-entry-requirements']/h3/following-sibling::p)]//text()")).strip().replace("\r\n", '').replace(
         "   ", '')
     list1['course_structure'] = ''.join(html.xpath('//*[@data-name="Course structure"]//text()')).strip().replace(
         "\r\n", '').replace("   ", '')
-    domestic_csp = html.xpath("//*[text()='Full fee']/following-sibling::p/strong/text()")
+    domestic_csp = html.xpath("//*[text()='Commonwealth supported place (CSP)']/following-sibling::p/strong/text()")
     if len(domestic_csp) == 2 or len(domestic_csp) == 1:
         list1['domestic_csp'] = domestic_csp[0]
     else:
         list1['domestic_csp'] = ''
-    international_csp = get_html(list1['href'] + '?international=true').xpath(
-        "//*[text()='International fee']/following-sibling::p/strong/text()")
-    if len(international_csp) == 2 or len(international_csp) == 1:
-        list1['international_csp'] = international_csp[0]
+    domestic_full = html.xpath("//*[text()='Full fee']/following-sibling::p/strong/text()")
+    if len(domestic_full) == 2 or len(domestic_full) == 1:
+        list1['domestic_full'] = domestic_full[0]
     else:
-        list1['international_csp'] = ''
+        list1['domestic_full'] = ''
+    international_full = get_html(list1['href'] + '?international=true').xpath(
+        "//*[text()='International fee']/following-sibling::p/strong/text()")
+    if len(international_full) == 2 or len(international_full) == 1:
+        list1['international_full'] = international_full[0]
+    else:
+        list1['international_full'] = ''
     list1['careers'] = ''.join(
         html.xpath("//*[contains(text(),'Careers')]/../preceding-sibling::p[1]/following-sibling::p//text()")).replace(
         'Careers', '')
@@ -96,5 +103,7 @@ if __name__ == '__main__':
     with ThreadPoolExecutor() as pool:
         pool.map(parse,hrefs)
     df = pd.DataFrame(datas)
-    df.to_excel("monash2.xlsx",index=False)
+    df = df.drop_duplicates()
+    df = df[['year_acquisition','href','degrees','course_name','desc','careers','duration','location','entry_requirements','domestic_full','domestic_csp','international_full','course_structure','course_code']]
+    df.to_excel("monash.xlsx",index=False)
 
