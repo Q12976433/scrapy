@@ -1,5 +1,7 @@
 #-*- coding:utf-8 -*-
 """
+
+
 ----------
 # create of software: PyCharm
 """
@@ -54,8 +56,8 @@ if __name__ == '__main__':
     for type in datas:
         data = {
             'fee_type': type[0],
-            'fee_year': 2022,
-            'cohort_year': 2022,
+            'fee_year': 2023,
+            'cohort_year': 2023,
             'course_area': 'All',
             'Search':'',
             'op': 'Search'
@@ -73,5 +75,5 @@ if __name__ == '__main__':
         print(len(list1))
     print("saving")
     df = pd.DataFrame(list1)
-    df.to_excel("uts.xlsx",index=False)
+    df.to_excel("uts2023.xlsx",index=False)
     print("over")
