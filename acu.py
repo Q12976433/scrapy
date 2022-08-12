@@ -1,6 +1,5 @@
 #-*- coding:utf-8 -*-
 """
-create of author:WV
 ----------
 create of datetime:2022/8/11 14:59
 ----------
