@@ -62,8 +62,8 @@ class Spider(object):
         list1['Duration'] = ';'.join(html.xpath("//*[text()='Duration']/../following-sibling::ul//text()")).strip()
         list1['Mode'] = ';'.join(html.xpath("//*[text()='Mode']/../following-sibling::ul//text()")).strip()
         list1['Campus'] = ';'.join(html.xpath("//*[text()='Campus']/../following-sibling::ul//text()")).strip()
-        list1['Entry requirements'] = ';'.join(
-            html.xpath("//*[text()='Entry requirements']/../following-sibling::ul//text()")).strip()
+        list1['ATAR'] = ';'.join(
+            html.xpath("//*[text()='Entry requirements']/../following-sibling::ul//text()")).strip().split(":")[1]
         list1['career options'] = ' '.join(html.xpath("//*[text()='Career outcomes']/following-sibling::div//text()")).strip()
         list1['Entry requirements'] = ''.join(
             html.xpath("//*[text()='Entry requirements']/following-sibling::p//text()")).strip()
