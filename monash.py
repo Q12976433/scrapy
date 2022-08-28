@@ -54,7 +54,7 @@ def parse1(li,i,labels):
     list1['degrees'] = labels[i]
     list1['href'] = li.xpath("./a/@href")[0]
     list1['course_name'] = li.xpath(".//h3/text()")[0]
-    list1['course_code'] = li.xpath(".//p/text()")[0].split(":")[1].strip()
+    list1['code'] = li.xpath(".//p/text()")[0].split(":")[1].strip()
     html = get_html(list1['href'])
     list1['desc'] = ''.join(html.xpath("//div[contains(@class,'course-page__summary-text')]//text()")).strip().replace(
         "\r\n", '').replace("   ", '')
@@ -78,9 +78,9 @@ def parse1(li,i,labels):
     international_csp = get_html(list1['href'] + '?international=true').xpath(
         "//*[text()='International fee']/following-sibling::p/strong/text()")
     if len(international_csp) == 2 or len(international_csp) == 1:
-        list1['international_csp'] = international_csp[0]
+        list1['international_fee'] = international_csp[0]
     else:
-        list1['international_csp'] = ''
+        list1['international_fee'] = ''
     list1['careers'] = ''.join(
         html.xpath("//*[contains(text(),'Careers')]/../preceding-sibling::p[1]/following-sibling::p//text()")).replace(
         'Careers', '')

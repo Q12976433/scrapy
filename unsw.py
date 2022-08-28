@@ -29,8 +29,8 @@ def parse1(i):
     list1 = {}
     href1 = i['displayUrl']
     html = get_html(href1)
-    list1['url'] = href1
-    list1['name'] = html.xpath("//h1/text()")[0]
+    list1['href'] = href1
+    list1['course_name'] = html.xpath("//h1/text()")[0]
     list1['desc'] = ''.join(html.xpath("//h1/following-sibling::p/text()"))
     name_divs = html.xpath(
         "//div[contains(@class,'propertytiles property-tiles-bg-colour--light-grey section')]/div[contains(@class,'property-tiles')]/div")
@@ -43,9 +43,9 @@ def parse1(i):
     for name_div1 in name_divs1:
         name_div1 = name_div1.replace("&", '').replace("  ", '_').replace(" ", '_').replace("?", '').lower()
         if 'fees' in name_div1:
-            list1['domestic_first_year_full_fee'] = ''.join(html.xpath("//div[contains(text(),'Indicative First Year Full Fee')]/following-sibling::div/text()")).replace("\n",'').strip()
+            list1['domestic_full'] = ''.join(html.xpath("//div[contains(text(),'Indicative First Year Full Fee')]/following-sibling::div/text()")).replace("\n",'').strip()
             list1['domestic_full_fee_to_complete_degree'] = ''.join(html.xpath("//div[contains(text(),'Indicative Full Fee to Complete Degree')]/following-sibling::div/text()")).replace("\n",'').strip()
-            list1['international_first_year_fee'] = ''.join(html.xpath("//div[contains(text(),'Indicative First Year Fee')]/following-sibling::div/text()")).replace("\n",'').strip()
+            list1['international_full'] = ''.join(html.xpath("//div[contains(text(),'Indicative First Year Fee')]/following-sibling::div/text()")).replace("\n",'').strip()
             list1['international_fee_to_complete_degree'] = ''.join(html.xpath("//div[contains(text(),'Indicative Fee to Complete Degree')]/following-sibling::div/text()")).replace("\n",'').strip()
         else:
             content = html.xpath(f"//div[@role='tabpanel'][position()={j}]//text()")

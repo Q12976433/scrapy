@@ -46,21 +46,21 @@ class Spider(object):
     def parse(self,li,faculy):
         list1 = {}
         list1['faculy'] = faculy
-        list1['degree'] = li.xpath("./@data-level")[0].replace("all ", '')
-        list1['courseName'] = li.xpath("./a/text()")[0]
-        list1['courseHref'] = li.xpath("./a/@href")[0]
+        list1['degrees'] = li.xpath("./@data-level")[0].replace("all ", '')
+        list1['course_name'] = li.xpath("./a/text()")[0]
+        list1['href'] = li.xpath("./a/@href")[0]
         html = self.get_html(list1['courseHref'])
         id = html.xpath("//body/@id")[0]
-        list1['id'] = id
+        list1['course_code'] = id
         data = self.send_post(id)
-        list1['overview'] = re.sub("<.*?>", '', ''.join(re.findall("<p>(.*?)</p>", data['ocb.overview'])))
-        list1['Study mode'] = ';'.join(set(re.findall('"mode".*?"(.*?)"', data['ocb.coursedetails.json'],re.S)))
-        list1['Campus locations'] = ';'.join(set(re.findall('"campus".*?"(.*?)"', data['ocb.coursedetails.json'],re.S)))
+        list1['desc'] = re.sub("<.*?>", '', ''.join(re.findall("<p>(.*?)</p>", data['ocb.overview'])))
+        list1['mode'] = ';'.join(set(re.findall('"mode".*?"(.*?)"', data['ocb.coursedetails.json'],re.S)))
+        list1['location'] = ';'.join(set(re.findall('"campus".*?"(.*?)"', data['ocb.coursedetails.json'],re.S)))
         html = etree.HTML(
             ''.join(re.findall('"DURATION".*?"(.*?)"courseOffering', data['ocb.coursedetails.json'],re.S)).replace(r"\r",'').replace(r"\n", '').replace("\\", ''))
         list1['Duration'] = ' '.join(html.xpath("//text()")[3:]).replace(r"\r", '').replace(r"\n", '').replace('"}},','').replace(' for specific information for Higher Degree duration. ','')
         try:
-            list1['session'] = [i['name'][-4:] for i in json.loads(data['ocb.coursedetails.json'])['sessions'] if i['code'] == json.loads(data['ocb.coursedetails.json'])['courseOfferings'][0]['sessionCodes'][0]][0]
+            list1['year_acquisition'] = [i['name'][-4:] for i in json.loads(data['ocb.coursedetails.json'])['sessions'] if i['code'] == json.loads(data['ocb.coursedetails.json'])['courseOfferings'][0]['sessionCodes'][0]][0]
         except:list1['session'] = ''
         try:
             list1['AQF level'] = eval(re.findall("\[.*?\]",re.findall('"AQF_LEVELS":(.*?)"PUBLICATION_ID',data['ocb.coursedetails.json'],re.S)[0],re.S)[0])[-1]['AQF'].replace("AQF ",'')
@@ -70,18 +70,18 @@ class Spider(object):
         except:list1['ATAR'] = ''
 
         try:
-            list1['International fee'] = [i['subjectFee'] for i in json.loads(data['ocb.coursedetails.json'])['courseOfferings'] if i['studentType'] == 'International' and i['year']=='2023' and i['mode'] == 'On Campus' and i['placeType'] == 'Full Fee Paying'][0]
-            if list1['International fee'] is None:
-                list1['International fee'] = 'TBA'
+            list1['international_full'] = [i['subjectFee'] for i in json.loads(data['ocb.coursedetails.json'])['courseOfferings'] if i['studentType'] == 'International' and i['year']=='2023' and i['mode'] == 'On Campus' and i['placeType'] == 'Full Fee Paying'][0]
+            if list1['international_full'] is None:
+                list1['international_full'] = 'TBA'
         except:
-            list1['International fee'] = "TBA"
+            list1['international_full'] = "TBA"
         try:
-            list1['Domestic fee'] = [i['subjectFee'] for i in json.loads(data['ocb.coursedetails.json'])['courseOfferings'] if i['studentType'] == 'Domestic' and i['year']=='2023' and i['mode'] == 'On Campus' and i['placeType'] == 'Full Fee Paying'][0]
-            if list1['Domestic fee'] is None:
-                list1['Domestic fee'] = 'TBA'
+            list1['domestic_full'] = [i['subjectFee'] for i in json.loads(data['ocb.coursedetails.json'])['courseOfferings'] if i['studentType'] == 'Domestic' and i['year']=='2023' and i['mode'] == 'On Campus' and i['placeType'] == 'Full Fee Paying'][0]
+            if list1['domestic_full'] is None:
+                list1['domestic_full'] = 'TBA'
         except:
-            list1['Domestic fee'] = "TBA"
-        list1['Career opportunities'] = re.sub("<.*?>", '', data['ocb.career.opportunities'])
+            list1['domestic_full'] = "TBA"
+        list1['Careers'] = re.sub("<.*?>", '', data['ocb.career.opportunities'])
         print(list1)
         print("*" * 50)
         datas.append(list1)
