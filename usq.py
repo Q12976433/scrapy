@@ -82,7 +82,7 @@ class Spider(object):
         list1['mode'] = ' '.join([i.strip() for i in html.xpath("//div[contains(@class,'row pb-4 u-equal-height-columns')]/div[2]/ul//text()") if i !='']).replace("\r\n",'').strip()
         list1['location'] = ' '.join([i.strip() for i in html.xpath("//div[contains(@class,'row pb-4 u-equal-height-columns')]/div[4]/ul//text()") if i !='']).replace("\r\n",'').strip()
         list1['duration'] = ' '.join([i.strip() for i in html.xpath("//div[contains(@class,'row pb-4 u-equal-height-columns')]/div[6]/ul//text()") if i !='']).replace("\r\n",'').strip()
-        list1['duration'] = ' '.join([i.strip() for i in html.xpath("//div[contains(@class,'row pb-4 u-equal-height-columns')]/div[7]/ul//text()") if i !='']).replace("\r\n",'').strip()
+        list1['start'] = ' '.join([i.strip() for i in html.xpath("//div[contains(@class,'row pb-4 u-equal-height-columns')]/div[7]/ul//text()") if i !='']).replace("\r\n",'').strip()
         list1['desc'] = ' '.join([i.strip() for i in html.xpath("//div[@id='overview']//text()") if i !='']).replace("\r\n",'').strip()
         list1['careers'] = ' '.join([i.strip() for i in html.xpath("//div[@id='career-outcomes']//text()") if i !='']).replace("\r\n",'').strip()
         list1['degree structure'] = ' '.join([i.strip() for i in html.xpath("//div[@id='degree-structure']//text()") if i !='']).replace("\r\n",'').strip()
@@ -95,7 +95,7 @@ class Spider(object):
 
     def save(self,datas):
         df = pd.DataFrame(datas)
-        df.to_excel("course.xlsx",index = False)
+        df.to_excel("usq.xlsx",index = False)
 
 
 if __name__ == '__main__':
