@@ -52,6 +52,7 @@ def parse1(Faculty,degree,course):
                               i != '' or i != ' ']).strip()
     list1['Desc'] = re.sub('\s+', ' ', list1['Desc'])
     list1['Location'] = '; '.join([i.strip() for i in html.xpath("//div[@id='locationDropdown']/button/text()")])
+    list1['domestic_full'] = ''
     list1['ATAR'] = ''.join(html.xpath("//small[text()='ATAR/Rank']/preceding-sibling::strong[last()]/text()")).strip()
     year = ''.join(html.xpath("//strong[@audience='domestic']/text()")).strip()
     tt = ''.join(html.xpath("//small[@class='summary-footnote --small' and @audience='domestic']/text()")).strip()
@@ -72,6 +73,8 @@ def parse1(Faculty,degree,course):
     list1['International_full'] = ''.join(
         html.xpath("//div[@class='--button-last' and @audience='international']/strong/text()")).strip().replace("A$",
                                                                                                                  '')
+                                                                                                             
+                                                                                                          
     if '-' in list1['International_full']:
         list1['International_full'] = list1['International_full'].split("-")[0].strip()
     elif '/' in list1['International_full']:

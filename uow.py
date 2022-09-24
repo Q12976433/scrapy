@@ -38,7 +38,7 @@ def parse(li,faculy,degrees,url):
             international_session_fee = tr.xpath("./td[3]/p/text()")[0]
             list1['international_session_fee'] = international_session_fee.split(" ")[0]
             list1['international_full'] = tr.xpath("./td[4]/p/text()")[0].split(" ")[0]
-    list1['international_csp'] = ''.join(html.xpath("//h4[@id='intl-fees']/following-sibling::div/div/p//text()"))
+  
     if flag == 1:
         list1[' year_acquisition'] = international_session_fee.split(" ")[-1].replace("(",'').replace(")",'')
     trs = html.xpath("//h4[@id='dom-fees']/following-sibling::div//table/tr")
